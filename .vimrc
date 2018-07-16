@@ -16,12 +16,14 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'junegunn/goyo.vim'
 Plugin 'noahfrederick/vim-noctu.git'
+Plugin 'arcticicestudio/nord-vim'
+"Plugin 'altercation/vim-colors-solarized'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
-" filetype plugin indent on    " required
+filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
-filetype plugin on
+" filetype plugin on
 "
 " Brief help
 " :PluginList       - lists configured plugins
@@ -37,11 +39,15 @@ imap jj <Esc>
 set number
 set relativenumber
 syntax on
+set clipboard=unnamed
+set mouse=a
+nnoremap gb :ls<CR>:b<Space>
 let mapleader=","
 
-" Go to placeholder
-nnoremap <C-j> /<lt>++><Enter>vf>c
-inoremap <C-j> <Esc>/<lt>++><Enter>vf>c
+" Placeholder navigation
+map <C-j> <Esc>/<++><Enter>
+inoremap <C-j> <Esc>/<++><Enter>
+vnoremap <C-j> <Esc>/<++><Enter>
 
 " Fuzzy search
 set path+=**
@@ -56,12 +62,25 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
 " Airline theme
-let g:airline_theme='deus'
+" let g:airline_theme='deus'
 
 " Some latex compiling
 nnoremap <Leader>ll :!latexmk -pdf % && pkill -HUP mupdf<Enter><Enter>
 nnoremap <Leader>lv :!mupdf  %:r.pdf & <Enter><Enter>
 
-" Color?
-" colorscheme noctu
+" GUI and terminal specific settings
+syntax on
+if has("gui_running")
+    " Nord colorscheme settings
+    let g:nord_italic=1
+    let g:nord_italic_comments=1
+    let g:nord_underline=1
+	colorscheme nord
+	" colorscheme solarized
+else
+	colorscheme nord
+	" colorscheme zenburn
+	" Set background=dark
+	" colorscheme solarized
+endif
 
