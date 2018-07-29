@@ -45,10 +45,12 @@ nnoremap gb :ls<CR>:b<Space>
 let mapleader=","
 
 " Placeholder navigation
-map <C-j> <Esc>/<++><Enter>
-inoremap <C-j> <Esc>/<++><Enter>
-vnoremap <C-j> <Esc>/<++><Enter>
+map <C-j> <Esc>/<++><Enter>vf>c
+inoremap <C-j> <Esc>/<++><Enter>vf>c
 
+" Shortcuts
+map du ^v$yk$i<Space><Esc>pjd2d
+    
 " Fuzzy search
 set path+=**
 set wildmenu
@@ -63,10 +65,6 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 
 " Airline theme
 " let g:airline_theme='deus'
-
-" Some latex compiling
-nnoremap <Leader>ll :!latexmk -pdf % && pkill -HUP mupdf<Enter><Enter>
-nnoremap <Leader>lv :!mupdf  %:r.pdf & <Enter><Enter>
 
 " GUI and terminal specific settings
 syntax on
