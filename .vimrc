@@ -17,6 +17,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'junegunn/goyo.vim'
 Plugin 'noahfrederick/vim-noctu.git'
 Plugin 'arcticicestudio/nord-vim'
+Plugin 'https://github.com/keith/swift.vim.git'
 "Plugin 'altercation/vim-colors-solarized'
 
 " All of your Plugins must be added before the following line
