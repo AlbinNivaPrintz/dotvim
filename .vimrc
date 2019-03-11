@@ -17,8 +17,13 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'junegunn/goyo.vim'
 Plugin 'noahfrederick/vim-noctu.git'
 Plugin 'arcticicestudio/nord-vim'
+Plugin 'patstockwell/vim-monokai-tasty'
 Plugin 'https://github.com/keith/swift.vim.git'
-"Plugin 'altercation/vim-colors-solarized'
+Plugin 'vim-pandoc/vim-pandoc-syntax'
+Plugin 'https://github.com/Valloric/YouCompleteMe'
+" Plugin 'lervag/vimtex'
+" Plugin 'klen/python-mode'
+" Plugin 'altercation/vim-colors-solarized'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -26,14 +31,6 @@ filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 " filetype plugin on
 "
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
 
 " Standard stuff
 imap jj <Esc>
@@ -65,23 +62,28 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
 " Airline theme
-" let g:airline_theme='deus'
+" let g:airline_theme='monokai'
+
+" Detect pandoc syntax
+augroup pandoc_syntax
+    au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
+augroup END
 
 " GUI and terminal specific settings
 syntax on
 if has("gui_running")
     " Nord colorscheme settings
-    let g:nord_italic=1
-    let g:nord_italic_comments=1
-    let g:nord_underline=1
-    let g:nord_comment_brightness=12
-	colorscheme nord
-	" colorscheme solarized
+    " let g:nord_italic=1
+    " let g:nord_italic_comments=1
+    " let g:nord_underline=1
+    " let g:nord_comment_brightness=12
+	" colorscheme nord
+    let g:vim_monokai_tasty_italic = 1
+    colorscheme vim-monokai-tasty
 else
-    let g:nord_comment_brightness=12
-	colorscheme nord
-	" colorscheme zenburn
-	" Set background=dark
-	" colorscheme solarized
+    " let g:nord_comment_brightness=12
+	" colorscheme nord
+    colorscheme vim-monokai-tasty
+    let g:airline_theme='monokai_tasty'
 endif
 
