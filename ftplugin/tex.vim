@@ -2,11 +2,13 @@
 set tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab
 " Latex compiling
 " nnoremap <Leader>cc  :!latexmk -pdf % && pkill -HUP mupdf<Enter><Enter>
-nnoremap <Leader>cc  :!pdflatex % <Enter><Enter>
+nnoremap <Leader>cc  :!pdflatex % <Enter>
+nnoremap <Leader>cb  :!biber %:r <Enter>
+" nnoremap <Leader>cv :!mupdf  %:r.pdf & <Enter><Enter>
 nnoremap <Leader>cv :!open  %:r.pdf & <Enter><Enter>
+nnoremap <Leader>m :!make <Enter>
 
-" Latex vim shortcuts
-" Shortcuts
+" Latex shortcuts
 nmap <Leader>/ i\frac{}{<lt>++>}<lt>++><Esc>F};i
 imap <Leader>/ \frac{}{<lt>++>}<lt>++><Esc>F};i
 imap ^^ ^{}<++><Esc>F}i
@@ -14,13 +16,13 @@ imap __ _{}<++><Esc>F}i
 inoremap {{ {}<++><Esc>F}i
 inoremap (( ()<++><Esc>F)i
 inoremap [[ []<++><Esc>F]i
-inoremap l{ \left\{\right\}<++><Esc>T{i
-inoremap l( \left(\right)<++><Esc>T(i
-inoremap l[ \left[\right]<++><Esc>T[i
-nmap <F5> i\begin{<++>}<Enter>\end{<++>}<Esc>k0<C-j>
-imap <F5> \begin{<++>}<Enter>\end{<++>}<Esc>k0<C-j>
-imap $$ $$<++><Esc>F$i
-nmap <Leader>sc :!aspell check %<Enter>
+inoremap <Leader>{ \left\{\right\}<++><Esc>T{i
+inoremap <Leader>( \left(\right)<++><Esc>T(i
+inoremap <Leader>[ \left[\right]<++><Esc>T[i
+nnoremap <F5> :call ft#tex#WriteEnvironment()<CR>kO
+inoremap <F5> <Esc>:call ft#tex#WriteEnvironment()<CR>kO
+inoremap $$ $$<++><Esc>F$i
+nnoremap <Leader>sc :!aspell check %<Enter>
 
 " Greek characters
 inoremap <Leader>a \alpha
@@ -34,4 +36,3 @@ inoremap <Leader>s \sigma
 inoremap <Leader>x \xi
 inoremap <Leader>o \omega
 inoremap <Leader>O \Omega
-
