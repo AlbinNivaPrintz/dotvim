@@ -1,12 +1,8 @@
-" Set indentation
-set tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab
 " Latex compiling
-" nnoremap <Leader>cc  :!latexmk -pdf % && pkill -HUP mupdf<Enter><Enter>
-nnoremap <Leader>cc  :!pdflatex % <Enter>
-nnoremap <Leader>cb  :!biber %:r <Enter>
+" nnoremap <Leader>cc  :!pandoc % -f markdown -t latex -s -o $:r.pdf && pkill -HUP mupdf<Enter><Enter>
+nnoremap <Leader>cc  :!pandoc % -f markdown -t latex -s -o $:r.pdf<Enter><Enter>
 " nnoremap <Leader>cv :!mupdf  %:r.pdf & <Enter><Enter>
 nnoremap <Leader>cv :!open  %:r.pdf & <Enter><Enter>
-nnoremap <Leader>m :!make <Enter>
 
 " Latex shortcuts
 nmap <Leader>/ i\frac{}{<lt>++>}<lt>++><Esc>F};i
@@ -19,10 +15,10 @@ inoremap [[ []<++><Esc>F]i
 inoremap <Leader>{ \left\{\right\}<++><Esc>T{i
 inoremap <Leader>( \left(\right)<++><Esc>T(i
 inoremap <Leader>[ \left[\right]<++><Esc>T[i
-nnoremap <Leader>e :call ft#tex#WriteEnvironment()<CR>kO
-inoremap <Leader>e <Esc>:call ft#tex#WriteEnvironment()<CR>kO
-inoremap $$ $$<++><Esc>F$i
-nnoremap <Leader>sc :!aspell check %<Enter>
+nmap <F5> i\begin{<++>}<Enter>\end{<++>}<Esc>k0<C-j>
+imap <F5> \begin{<++>}<Enter>\end{<++>}<Esc>k0<C-j>
+imap $$ $$<++><Esc>F$i
+nmap <Leader>sc :!aspell check %<Enter>
 
 " Greek characters
 inoremap <Leader>a \alpha
