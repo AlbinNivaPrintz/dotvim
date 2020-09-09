@@ -15,14 +15,20 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'davidhalter/jedi-vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'deoplete-plugins/deoplete-jedi'
+Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 Plug 'neomake/neomake'
-Plug 'https://github.com/majutsushi/tagbar.git'
+Plug 'majutsushi/tagbar'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
 Plug 'junegunn/vim-peekaboo'
 Plug 'altercation/vim-colors-solarized'
 Plug 'jalvesaq/Nvim-R'
+Plug 'fatih/vim-go'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'dyng/ctrlsf.vim'
+Plug 'jesseleite/vim-noh'
+Plug 'jsit/disco.vim'
 
 " Initialize plugin system
 call plug#end()
@@ -42,6 +48,8 @@ let g:jedi#completions_enabled = 0
 " Python lint
 let g:neomake_python_enabled_makers = ['flake8', 'mypy']
 call neomake#configure#automake('nrwi', 500)
+" Go
+let g:deoplete#sources#go#gocode_binary = '~/go/bin/gocode'
 
 " open the go-to function in split, not another buffer
 let g:jedi#use_splits_not_buffers = "right"
@@ -97,11 +105,12 @@ if has("gui_running")
   let g:airline_theme='minimalist'
 else
     set background=light
+    let g:airline_theme='minimalist'
     " solarized options 
     let g:solarized_visibility = "high"
     let g:solarized_contrast = "high"
-    colorscheme solarized
-    let g:airline_theme='solarized'
+    " colorscheme solarized
+    " let g:airline_theme='solarized'
 endif
 highlight Comment cterm=italic
 
@@ -122,3 +131,16 @@ let g:ycm_extra_conf_globlist = ['~/Abios/*']
 
 " Markdown
 let g:vim_markdown_folding_disabled = 1
+
+" Fugitive
+set diffopt+=vertical " Open diff vertically
+
+" Search Plugins
+nmap     <C-F>f <Plug>CtrlSFPrompt
+vmap     <C-F>f <Plug>CtrlSFVwordPath
+nmap     <C-F>n <Plug>CtrlSFCwordPath
+
+" vim-go
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
+let g:go_auto_type_info = 1
