@@ -25,10 +25,15 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'altercation/vim-colors-solarized'
 Plug 'jalvesaq/Nvim-R'
 Plug 'fatih/vim-go'
-Plug 'ctrlpvim/ctrlp.vim'
+Plug 'sebdah/vim-delve'
+Plug 'junegunn/fzf', {'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'dyng/ctrlsf.vim'
 Plug 'jesseleite/vim-noh'
 Plug 'jsit/disco.vim'
+Plug 'arcticicestudio/nord-vim'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 " Initialize plugin system
 call plug#end()
@@ -48,8 +53,6 @@ let g:jedi#completions_enabled = 0
 " Python lint
 let g:neomake_python_enabled_makers = ['flake8', 'mypy']
 call neomake#configure#automake('nrwi', 500)
-" Go
-let g:deoplete#sources#go#gocode_binary = '~/go/bin/gocode'
 
 " open the go-to function in split, not another buffer
 let g:jedi#use_splits_not_buffers = "right"
@@ -71,7 +74,8 @@ set number
 set relativenumber
 set clipboard^=unnamed,unnamedplus  " Cross platform yank to clipboard
 set mouse=a
-let mapleader=","
+let mapleader="\\"
+let maplocalleader=","
 set encoding=utf-8
 " Fuzzy search
 set path+=**
@@ -104,12 +108,14 @@ if has("gui_running")
   color summerfruit256
   let g:airline_theme='minimalist'
 else
-    set background=light
+    set background=dark
     let g:airline_theme='minimalist'
     " solarized options 
     let g:solarized_visibility = "high"
     let g:solarized_contrast = "high"
     " colorscheme solarized
+    colorscheme nord
+    " color summerfruit256
     " let g:airline_theme='solarized'
 endif
 highlight Comment cterm=italic
@@ -118,6 +124,33 @@ highlight Comment cterm=italic
 nnoremap <Leader>t :TagbarToggle<CR>
 let g:tagbar_iconchars = ['>', '|']
 highlight TagbarSignature guifg=Green ctermfg=Green
+let g:tagbar_type_go = {
+	\ 'ctagstype' : 'go',
+	\ 'kinds'     : [
+		\ 'p:package',
+		\ 'i:imports:1',
+		\ 'c:constants',
+		\ 'v:variables',
+		\ 't:types',
+		\ 'n:interfaces',
+		\ 'w:fields',
+		\ 'e:embedded',
+		\ 'm:methods',
+		\ 'r:constructor',
+		\ 'f:functions'
+	\ ],
+	\ 'sro' : '.',
+	\ 'kind2scope' : {
+		\ 't' : 'ctype',
+		\ 'n' : 'ntype'
+	\ },
+	\ 'scope2kind' : {
+		\ 'ctype' : 't',
+		\ 'ntype' : 'n'
+	\ },
+	\ 'ctagsbin'  : 'gotags',
+	\ 'ctagsargs' : '-sort -silent'
+\ }
 
 " Python
 let g:ycm_python_interpreter_path = '~/anaconda3/bin/python'
@@ -136,11 +169,40 @@ let g:vim_markdown_folding_disabled = 1
 set diffopt+=vertical " Open diff vertically
 
 " Search Plugins
-nmap     <C-F>f <Plug>CtrlSFPrompt
-vmap     <C-F>f <Plug>CtrlSFVwordPath
-nmap     <C-F>n <Plug>CtrlSFCwordPath
+" nmap     <C-F>f <Plug>CtrlSFPrompt
+" vmap     <C-F>f <Plug>CtrlSFVwordPath
+" nmap     <C-F>n <Plug>CtrlSFCwordPath
 
 " vim-go
+let g:deoplete#sources#go#gocode_binary = '~/go/bin/gocode'
+" Syntax
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+" Save on GoBuild
+set autowrite
+" Only use quickfix
+let g:go_list_type = "quickfix"
+" let g:go_fmt_command = "goimports" " Quite slow
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 let g:go_auto_type_info = 1
+" Prevent some weird buffer opening
+set completeopt-=preview
+
+" Yaml
+autocmd FileType yml,yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+" fzf
+nnoremap <C-P> :Files<CR>
+nnoremap <C-F> :Rg<space>
+nnoremap <C-F>f yaw:Rg<space><C-R>"<CR>
+" set rtp+=/usr/local/opt/fzf
+
+" ctrl-p
+" set wildignore+=*/galella/inferentia/data/*,*/galella/inferentia/models/detectron_lol/icons/*,*/galella/inferentia/models/detectron_lol/icon_sources/*
+
+" Snippets
+let g:UltiSnipsExpandTrigger="<C-S-F>"
+let g:UltiSnipsJumpForwardTrigger="<C-B>"
+let g:UltiSnipsJumpBackwardTrigger="<C-Z>"
