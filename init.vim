@@ -32,16 +32,18 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'glepnir/dashboard-nvim'
 
 Plug 'airblade/vim-gitgutter'
 
 " Themes
-" Plug 'morhetz/gruvbox'
 " Plug 'mangeshrex/uwu.vim'
 " Plug 'projekt0n/github-nvim-theme'
 " Plug 'altercation/vim-colors-solarized'
 " Plug 'arcticicestudio/nord-vim'
-Plug 'ayu-theme/ayu-vim'
+" Plug 'ayu-theme/ayu-vim'
+Plug 'sainnhe/everforest'
+Plug 'sainnhe/gruvbox-material'
 
 " Initialize plugin system
 call plug#end()
@@ -70,7 +72,7 @@ nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
 " Standard settings
 syntax on
 set number
-set relativenumber
+" set relativenumber
 set clipboard^=unnamed,unnamedplus  " Cross platform yank to clipboard
 set mouse=a
 let mapleader=","
@@ -103,24 +105,27 @@ let g:pandoc#syntax#conceal#use = 0
 
 " GUI and terminal specific settings
 syntax on
-if has("gui_running")
-  colorscheme nord
-  let g:airline_theme='minimalist'
-else
-  " colorscheme nord
-  set background=dark
-  " let g:airline_theme='minimalist'
-  " solarized options 
-  " let g:solarized_visibility = "high"
-  " let g:solarized_contrast = "high"
-  let g:gruvbox_italic = 1
-  let ayucolor="mirage"
-  colorscheme ayu
-  " let g:airline_theme = 'gruvbox'
-  " let g:airline_theme='solarized'
 
-  " let g:airline_theme='twofirewatch' " if you have Airline installed and want the associated theme
-endif
+set background=dark
+
+" solarized options 
+" let g:solarized_visibility = "high"
+" let g:solarized_contrast = "high"
+
+" everforest
+let g:everforest_enable_italic = 1
+let g:everforest_background = 'hard'
+
+" gruvbox-material
+let g:gruvbox_material_palette = 'original'
+let g:gruvbox_material_background = 'hard'
+let g:gruvbox_material_enable_italic = 1
+
+" ayu
+let ayucolor="mirage"
+
+colorscheme everforest
+
 highlight Comment cterm=italic
 
 " Markdown
@@ -176,7 +181,8 @@ end
 
 require('lualine').setup {
 options = {
-    theme = 'ayu_mirage',
+    -- theme = 'ayu_mirage',
+    theme = 'everforest',
     -- theme = 'github',
     -- section_separators = '',
     -- component_separators = '',
@@ -224,3 +230,11 @@ if has('nvim')
 else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
+
+" Dashboard
+let g:dashboard_default_executive = 'telescope'
+let g:dashboard_preview_command = 'cat'
+let g:dashboard_preview_pipeline = 'lolcat'
+let g:dashboard_preview_file = '~/.config/nvim/nvim_logo.cat'
+let g:dashboard_preview_file_height = 11
+let g:dashboard_preview_file_width = 80
