@@ -1,87 +1,58 @@
-set runtimepath^=~/.vim runtimepath+=~/.vim/after
+set runtimepath^=~/.vim,~/.vim/after,~/.local/share/nvim/site/pack
 let &packpath = &runtimepath
 
-set nocompatible              " be iMproved, required
-filetype off                  " required
+lua << EOF
+require('plugins')
 
-call plug#begin('~/.vim/plugged')
+-- Line wrapping indicator
+vim.o.showbreak = "↳ "
+-- Cross platform yank to clipboard
+vim.g.clipboard = {'unnamed', 'unnamedplus'}
+vim.wo.number = true
+vim.o.mouse = 'a'
 
-" Plugins
-" Plug 'scrooloose/nerdtree'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-fugitive'
-" Plug 'vim-airline/vim-airline'
-" Plug 'vim-airline/vim-airline-themes'
+------------------------
+-- Key bindings 
+------------------------
 
-Plug 'hoob3rt/lualine.nvim'
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'kyazdani42/nvim-tree.lua'
-"
-" Plug 'junegunn/goyo.vim'
-Plug 'neomake/neomake'
-Plug 'junegunn/vim-peekaboo'
-" Plug 'jalvesaq/Nvim-R'
-Plug 'jesseleite/vim-noh'
-Plug 'jsit/disco.vim'
-Plug 'mechatroner/rainbow_csv'
-" Neovim 0.5
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'neovim/nvim-lspconfig'
-" Plug 'hrsh7th/nvim-cmp'
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'glepnir/dashboard-nvim'
+vim.g.mapleader = ','
 
-Plug 'airblade/vim-gitgutter'
+-- Simple function to map keymap, non-recursive way
+local function map_key(mode, lhs, rhs)
+  vim.api.nvim_set_keymap(mode, lhs, rhs, { noremap = true, silent = true })
+end
 
-" Themes
-" Plug 'mangeshrex/uwu.vim'
-" Plug 'projekt0n/github-nvim-theme'
-" Plug 'altercation/vim-colors-solarized'
-" Plug 'arcticicestudio/nord-vim'
-" Plug 'ayu-theme/ayu-vim'
-Plug 'sainnhe/everforest'
-Plug 'sainnhe/gruvbox-material'
+map_key('i', 'jj', '<Esc>')
+map_key('n', 'gb', ':ls<CR>:b<Space>') -- Fast buffer change
 
-" Initialize plugin system
-call plug#end()
+-- UNUSED SINCE FZF
+-- Fuzzy search for files
+-- vim.o.path = vim.o.path..',**'
+-- vim.o.wildmenu = true
 
-filetype plugin indent on     " required
-" To ignore plugin indent changes, instead use:
-" filetype plugin on
-let &showbreak = '> '
+-- Placeholder navigation
+-- map <C-j> <Esc>/<++><Enter>vf>c
+-- inoremap <C-j> <Esc>/<++><Enter>vf>c
 
-let g:python3_host_prog = expand('~/anaconda3/envs/base/bin/python')
-" Python lint
-let g:neomake_python_enabled_makers = ['flake8', 'mypy']
-call neomake#configure#automake('nrwi', 500)
+-- Tabs vs spaces?
+vim.o.tabstop = 4
+vim.o.softtabstop = 0
+vim.o.expandtab = true
+vim.o.shiftwidth = 4
+vim.o.smarttab = true
 
-" Keybinds
-imap jj <Esc>
-" Fast buffer change
-nnoremap gb :ls<CR>:b<Space>
-" Placeholder navigation
-map <C-j> <Esc>/<++><Enter>vf>c
-inoremap <C-j> <Esc>/<++><Enter>vf>c
-" Clear search highlight
-nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
-
+EOF
 
 " Standard settings
-syntax on
-set number
+" set number
 " set relativenumber
-set clipboard^=unnamed,unnamedplus  " Cross platform yank to clipboard
-set mouse=a
-let mapleader=","
-set encoding=utf-8
+" set clipboard^=unnamed,unnamedplus  " Cross platform yank to clipboard
+" set mouse=a
 " Fuzzy search
-set path+=**
-set wildmenu
+" set path+=**
+" set wildmenu
 " Set tabs
-set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
+" set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 
 " Tab style for airline
 let g:airline#extensions#tabline#enabled = 1
@@ -141,6 +112,8 @@ let g:go_auto_type_info = 1
 
 " Lua
 lua << EOF
+require'nvim-tree'.setup()
+
 local nvim_lsp = require('lspconfig')
 local on_attach = function(client, bufnr)
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
@@ -165,16 +138,16 @@ local on_attach = function(client, bufnr)
     buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
     buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
     buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-    buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-    buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-    buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+    buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.show_line_diagnostics()<CR>', opts)
+    buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+    buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+    buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
     buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
     vim.api.nvim_command[[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
 end
 
-local servers = { "gopls", "pyright", "rust_analyzer" }
+local servers = { "gopls", "pyright", "rust_analyzer", "eslint" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end
@@ -202,7 +175,7 @@ EOF
 " Telescope
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>fb <cmd>lua require'telescope.builtin'.buffers{ show_all_buffers = true }<cr>
 nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 
 runtime! lang/*.vim
@@ -225,11 +198,12 @@ endif
 
 " COC
 " Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
+" if has('nvim')
+"   inoremap <silent><expr> <c-space> coc#refresh()
+" else
+"   inoremap <silent><expr> <c-@> coc#refresh()
+" endif
+" autocmd FileType python let b:coc_root_patterns = ['.git', '.env', 'venv', '.venv', 'setup.cfg', 'setup.py', 'pyproject.toml', 'pyrightconfig.json']
 
 " Dashboard
 let g:dashboard_default_executive = 'telescope'
