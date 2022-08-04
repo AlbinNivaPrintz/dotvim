@@ -12,7 +12,7 @@ function go_organize_imports_sync(timeout_ms)
   result = result[1].result
   if not result then return end
   edit = result[1].edit
-  vim.lsp.util.apply_workspace_edit(edit)
+  vim.lsp.util.apply_workspace_edit(edit, "utf-16")
 end
 
 vim.api.nvim_command("au BufWritePre *.go lua go_organize_imports_sync(1000)")
