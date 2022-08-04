@@ -7,7 +7,7 @@ require('plugins')
 -- Line wrapping indicator
 vim.o.showbreak = "↳ "
 -- Cross platform yank to clipboard
-vim.g.clipboard = {'unnamed', 'unnamedplus'}
+vim.o.clipboard = 'unnamed,unnamedplus'
 vim.wo.number = true
 vim.o.mouse = 'a'
 
@@ -24,6 +24,7 @@ end
 
 map_key('i', 'jj', '<Esc>')
 map_key('n', 'gb', ':ls<CR>:b<Space>') -- Fast buffer change
+map_key('n', '<C-n>', ':NvimTreeToggle<CR>')
 
 -- UNUSED SINCE FZF
 -- Fuzzy search for files
@@ -41,18 +42,31 @@ vim.o.expandtab = true
 vim.o.shiftwidth = 4
 vim.o.smarttab = true
 
-EOF
+-- Treesitter
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all"
+  ensure_installed = { "python", "go", "rust" },
 
-" Standard settings
-" set number
-" set relativenumber
-" set clipboard^=unnamed,unnamedplus  " Cross platform yank to clipboard
-" set mouse=a
-" Fuzzy search
-" set path+=**
-" set wildmenu
-" Set tabs
-" set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
+  -- Install parsers synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  highlight = {
+    -- `false` will disable the whole extension
+    enable = true,
+
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+}
+
+-- Folding
+-- vim.o.foldmethod = "expr"
+-- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+
+EOF
 
 " Tab style for airline
 let g:airline#extensions#tabline#enabled = 1
@@ -62,11 +76,6 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 " Goyo settings
 let g:goyo_width = 120
 
-" NERDTree settings
-nnoremap <C-n> :NvimTreeToggle<CR>
-" map <C-n> :NERDTreeToggle<CR>
-" let g:NERDTreeQuitOnOpen = 3
-
 " Detect pandoc syntax
 augroup pandoc_syntax
     au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
@@ -74,10 +83,7 @@ augroup END
 " pandoc syntax config
 let g:pandoc#syntax#conceal#use = 0
 
-" GUI and terminal specific settings
-syntax on
-
-set background=dark
+set background=light
 
 " solarized options 
 " let g:solarized_visibility = "high"
@@ -101,14 +107,6 @@ highlight Comment cterm=italic
 
 " Markdown
 let g:vim_markdown_folding_disabled = 1
-
-" Fugitive
-set diffopt+=vertical " Open diff vertically
-
-" vim-go
-let g:go_def_mode='gopls'
-let g:go_info_mode='gopls'
-let g:go_auto_type_info = 1
 
 " Lua
 lua << EOF
@@ -195,15 +193,6 @@ if (empty($TMUX))
     set termguicolors
   endif
 endif
-
-" COC
-" Use <c-space> to trigger completion.
-" if has('nvim')
-"   inoremap <silent><expr> <c-space> coc#refresh()
-" else
-"   inoremap <silent><expr> <c-@> coc#refresh()
-" endif
-" autocmd FileType python let b:coc_root_patterns = ['.git', '.env', 'venv', '.venv', 'setup.cfg', 'setup.py', 'pyproject.toml', 'pyrightconfig.json']
 
 " Dashboard
 let g:dashboard_default_executive = 'telescope'

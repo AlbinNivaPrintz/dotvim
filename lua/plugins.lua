@@ -13,7 +13,6 @@ return require('packer').startup(function()
   use "jsit/disco.vim"
   use "mechatroner/rainbow_csv"
 
--- Neovim 0.5
   use {
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate'
